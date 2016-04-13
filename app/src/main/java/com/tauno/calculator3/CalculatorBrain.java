@@ -41,33 +41,11 @@ public class CalculatorBrain extends BroadcastReceiver {
                         break;
                 }
                     savedValue = round(savedValue);
-
-                    OperandType optype = uow.operandTypeRepo.getOperandType(String.valueOf(operator));
-                    optype.setCounter(optype.getCounter() + 1);
-                    uow.operandTypeRepo.update(optype);
-
-                    int time = (int) (System.currentTimeMillis());
-                    uow.operationRepo.add(new Operation(a,b,savedValue,time,optype.getId()));
-
-                    Calendar cal = Calendar.getInstance();
-                    int month = cal.get(Calendar.MONTH);
-                    int day = cal.get(Calendar.DATE);
-                    int year = cal.get(Calendar.YEAR);
-                    int dayStamp = day*1000000 + month*10000 + year;
-
-                    DayStatistic stat = uow.dayStatisticRepo.getOperationInDay(dayStamp, optype.getId());
-                    if(stat == null){
-                        stat = new DayStatistic(dayStamp, optype.getId(), 1);
-                        uow.dayStatisticRepo.add(stat);
-                    } else {
-                        stat.setDayCounter(stat.getDayCounter()+1);
-                        uow.dayStatisticRepo.update(stat);
-                    }
-                setResultCode(Activity.RESULT_OK);
-                setResultData(String.valueOf(savedValue));
+                    uow.addToStatistic(String.valueOf(operator), a, b, savedValue);
                 }
-
             }
+        setResultCode(Activity.RESULT_OK);
+        setResultData(String.valueOf(savedValue));
         }
 
 

@@ -30,7 +30,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final String COLUMN_DAYSTATISTIC_ID = "_id";
     public static final String COLUMN_DAYSTATISTIC_DAYSTAMP = "daystamp";
     public static final String COLUMN_DAYSTATISTIC_DAYCOUNTER = "daycounter";
-    public static final String COLUMN_DAYSTATISTIC_OPERANDID = "operand_id";
+    public static final String COLUMN_DAYSTATISTIC_OPERANDID = "operandId";
 
     public static final String[] ALLCOLUMNS_DAYSTATISTIC = {COLUMN_DAYSTATISTIC_ID,
             COLUMN_DAYSTATISTIC_DAYSTAMP, COLUMN_DAYSTATISTIC_DAYCOUNTER,
@@ -44,11 +44,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final String COLUMN_OPERATION_NUM2 = "number2";
     public static final String COLUMN_OPERATION_RES = "result";
     public static final String COLUMN_OPERATION_TIMESTAMP = "timestamp";
-    public static final String COLUMN_OPERATION_OPERANDID = "operand_id";
+    public static final String COLUMN_OPERATION_OPERANDID = "operandId";
 
     public static final String[] ALLCOLUMNS_OPERATION = {COLUMN_OPERATION_ID,
-            COLUMN_OPERATION_NUM1, COLUMN_OPERATION_NUM2, COLUMN_OPERATION_RES,
-            COLUMN_OPERATION_TIMESTAMP, COLUMN_OPERATION_OPERANDID};
+            COLUMN_OPERATION_OPERANDID, COLUMN_OPERATION_NUM1, COLUMN_OPERATION_NUM2, COLUMN_OPERATION_RES,
+            COLUMN_OPERATION_TIMESTAMP};
 
     //DATABASE TABLES CREATE COMMAND
     private static final String CREATE_TABLE_OPERANDTYPE = "CREATE TABLE "

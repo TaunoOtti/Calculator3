@@ -1,5 +1,8 @@
 package com.tauno.calculator3;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by Tauno on 3.04.2016.
  */
@@ -9,19 +12,29 @@ public class Operation implements IEntity {
     private double _num1;
     private double _num2;
     private double _res;
-    private int _timestamp;
+    private long _timestamp;
+    private String operand;
 
     public Operation(){
 
     }
 
-    public Operation(double n1, double n2, double res, int time, long operandId){
+    public Operation(double n1, double n2, double res, long time, long operandId){
         setNum1(n1);
         setNum2(n2);
         setRes(res);
         setTimeStamp(time);
         setOperandId(operandId);
+        //setOperand(operand);
 
+    }
+
+    public String getOperand() {
+        return operand;
+    }
+
+    public void setOperand(String operand) {
+        this.operand = operand;
     }
 
     public long getId(){
@@ -64,12 +77,23 @@ public class Operation implements IEntity {
         this._res = res;
     }
 
-    public int getTimeStamp(){
+    public long getTimeStamp(){
         return this._timestamp;
     }
 
-    public void setTimeStamp(int timestamp){
+    public void setTimeStamp(long timestamp){
         this._timestamp = timestamp;
+    }
+
+    @Override
+    public String toString() {
+        return timeStampToDate(getTimeStamp())+"\nOperation: "+getNum1()+ " " + getOperand() + " " +getNum2()+" = "+getRes();
+    }
+
+    private String timeStampToDate(long l) {
+        Date date = new Date(l);
+        SimpleDateFormat outFormatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        return outFormatter.format(date);
     }
 
 }

@@ -25,9 +25,9 @@ public class UOW {
         dbHelper = new MySQLiteHelper(context);
         database = dbHelper.getWritableDatabase();
 
-        dayStatisticRepo = new DayStatisticRepo(database, dbHelper.TABLE_DAYSTATISTIC, dbHelper.ALLCOLUMNS_DAYSTATISTIC);
+        dayStatisticRepo = new DayStatisticRepo(database, dbHelper.TABLE_DAYSTATISTIC, dbHelper.ALLCOLUMNS_DAYSTATISTIC, operandTypeRepo);
         operandTypeRepo = new OperandTypeRepo(database, dbHelper.TABLE_OPERANDTYPE, dbHelper.ALLCOLUMNS_OPERANDTYPE);
-        operationRepo = new OperationRepo(database, dbHelper.TABLE_OPERATION, dbHelper.ALLCOLUMNS_OPERATION);
+        operationRepo = new OperationRepo(database, dbHelper.TABLE_OPERATION, dbHelper.ALLCOLUMNS_OPERATION, operandTypeRepo);
     }
 
     public void DropCreateDatabase(){
@@ -35,29 +35,29 @@ public class UOW {
     }
 
     public void SeedData(){
+        if(operationRepo.getAll().isEmpty()){
+            OperandType plus = operandTypeRepo.add(new OperandType("+", 0));
+            OperandType minus = operandTypeRepo.add(new OperandType("-", 0));
+            OperandType divide = operandTypeRepo.add(new OperandType("/", 0));
+            OperandType multiply = operandTypeRepo.add(new OperandType("*", 0));
+        }
 
-        OperandType plus = operandTypeRepo.add(new OperandType("+", 0));
-        OperandType minus = operandTypeRepo.add(new OperandType("-", 0));
-        OperandType divide = operandTypeRepo.add(new OperandType("/", 0));
-        OperandType multiply = operandTypeRepo.add(new OperandType("*", 0));
+    }
 
-        Operation op = operationRepo.add(new Operation(1,2,0.5,111111, plus.getId()));
-        Operation op1 = operationRepo.add(new Operation(1,3,0.5,111111, minus.getId()));
-        Operation op2 = operationRepo.add(new Operation(1,4,0.5,111111, multiply.getId()));
-        Operation op3 = operationRepo.add(new Operation(1,5,0.5,111111, divide.getId()));
-        Operation op4 = operationRepo.add(new Operation(1,6,0.5,111111, plus.getId()));
+    public void addToStatistic(String op, Double n1, Double n2, Double ans){
+        OperandType oper = operandTypeRepo.getOperandType(op);
+        oper.setCounter(oper.getCounter() + 1);
+        operandTypeRepo.update(oper);
 
-        operandTypeRepo.add(plus);
-        operandTypeRepo.add(minus);
-        operandTypeRepo.add(divide);
-        operandTypeRepo.add(multiply);
+        dayStatisticRepo.addOneToDayCounter(oper.getId());
 
-        operationRepo.add(op);
-        operationRepo.add(op1);
-        operationRepo.add(op2);
-        operationRepo.add(op3);
-        operationRepo.add(op4);
-
+        Operation operation = new Operation();
+        operation.setOperandId(oper.getId());
+        operation.setNum1(n1);
+        operation.setNum2(n2);
+        operation.setRes(ans);
+        operation.setTimeStamp(System.currentTimeMillis());
+        operationRepo.add(operation);
     }
 
 }

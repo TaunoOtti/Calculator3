@@ -12,12 +12,20 @@
     tools:context="com.tauno.calculator3.MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Statistic"
+        android:textSize="30dp"
+        />
 
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight=".20"
+        android:fastScrollEnabled="false"
+        android:layout_below="@+id/text"/>
 
-
-
-   <ListView
-       android:id="@+id/list"
-       android:layout_width="match_parent"
-       android:layout_height="fill_parent"></ListView>
 </RelativeLayout>

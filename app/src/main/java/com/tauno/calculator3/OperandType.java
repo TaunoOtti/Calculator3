@@ -6,7 +6,7 @@ package com.tauno.calculator3;
 public class OperandType implements IEntity {
     private long _id;
     private String operand;
-    private int _lifeTimeCounter;
+    private long _lifeTimeCounter;
 
     public OperandType(){
 
@@ -31,15 +31,16 @@ public class OperandType implements IEntity {
 
     public void setOperand(String operand){ this.operand = operand; }
 
-    public int getCounter(){
+    public long getCounter(){
         return this._lifeTimeCounter;
     }
 
-    public void setCounter(int counter){
+    public void setCounter(long counter){
         this._lifeTimeCounter = counter;
     }
 
     @Override
-    public String toString(){return  operand;}
-
+    public String toString() {
+        return "Operand \"" + getOperand() + "\" has been used " + getCounter() + " times";
+    }
 }

@@ -12,9 +12,9 @@ import java.util.List;
  */
 public abstract class Repo <T extends IEntity> {
     // Database fields
-    private SQLiteDatabase database;
-    private String tableName;
-    private String[] allColumns;
+    public SQLiteDatabase database;
+    public String tableName;
+    public String[] allColumns;
 
 
     private static String TAG = Repo.class.getName();

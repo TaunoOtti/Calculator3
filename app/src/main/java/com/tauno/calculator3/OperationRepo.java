@@ -4,13 +4,18 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Tauno on 10.04.2016.
  */
 public class OperationRepo extends Repo<Operation> {
 
-    public OperationRepo(SQLiteDatabase database, String tableName, String[] allColumns){
+    private OperandTypeRepo operandTypeRepo;
+    public OperationRepo(SQLiteDatabase database, String tableName, String[] allColumns, OperandTypeRepo opr){
         super(database, tableName, allColumns);
+        this.operandTypeRepo = opr;
     }
 
     @Override
@@ -22,7 +27,8 @@ public class OperationRepo extends Repo<Operation> {
         operation.setNum2(cursor.getDouble(3));
         operation.setRes(cursor.getDouble(4));
         operation.setTimeStamp(cursor.getInt(5));
-
+        //operation.setOperand(operandTypeRepo.getOperandforResult(cursor.getLong(1)));
+        operation.setOperand(operandTypeRepo.getOperandforResult(operation.getOperandId()));
         return operation;
     }
 
@@ -36,7 +42,7 @@ public class OperationRepo extends Repo<Operation> {
         contentValues.put(MySQLiteHelper.COLUMN_OPERATION_RES, entity.getRes());
         contentValues.put(MySQLiteHelper.COLUMN_OPERATION_TIMESTAMP, entity.getTimeStamp());
 
-
         return contentValues;
     }
+
 }

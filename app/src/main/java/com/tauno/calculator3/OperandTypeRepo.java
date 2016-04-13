@@ -44,4 +44,9 @@ public class OperandTypeRepo extends Repo<OperandType> {
         cursor.close();
         return optype;
     }
+
+    public String getOperandforResult(long id){
+        OperandType operandType = getById(id);
+        return operandType.getOperand();
+    }
 }

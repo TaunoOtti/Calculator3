@@ -1,5 +1,7 @@
 package com.tauno.calculator3;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,10 +13,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-
+    private ListView listView;
+    private TextView textView;
     private UOW uow;
     private DayStatisticAdapter adapter;
 
@@ -22,41 +26,62 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         uow = new UOW(getApplicationContext());
 
-        uow.DropCreateDatabase();
+        listView = (ListView) findViewById(R.id.list);
+        textView = (TextView) findViewById(R.id.text);
+
+        //uow.DropCreateDatabase();
         uow.SeedData();
-
-        displayDataToListView();
-
+        displayOperatorsListView();
     }
 
-    public void displayDataToListView(){
-        adapter = new DayStatisticAdapter(this, uow.dayStatisticRepo.getCursorAll(), uow);
+    private void displayOperandsListView() {
+        String s = "Statistic with operands";
+        textView.setText(s);
+        OperandAdapter adapter = new OperandAdapter(this, uow.operandTypeRepo.getCursorAll(), uow);
+        listView.setAdapter(adapter);
+    }
 
-        ListView lview = (ListView) findViewById(R.id.list);
+    private void displayDayStatsListView() {
+        String s = "Day statistic";
+        textView.setText(s);
+        DayStatisticAdapter adapter = new DayStatisticAdapter(this, uow.dayStatisticRepo.getCursorAll(), uow);
+        listView.setAdapter(adapter);
+    }
 
+    private void displayOperatorsListView() {
+        String s = "Statistic";
+        textView.setText(s);
+        OperationAdapter adapter = new OperationAdapter(this, uow.operationRepo.getCursorAll(), uow);
+        listView.setAdapter(adapter);
+    }
 
-        // Assign adapter to ListView
-        // listview will iterate over adapter, and get filled subview for every row
-        lview.setAdapter(adapter);
+    public void refreshClicked() {
+        refreshActivity();
+    }
 
-        lview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> listView, View view,
-                                    int position, long id) {
-                // Get the cursor, positioned to the corresponding row in the result set
-                Cursor cursor = (Cursor) listView.getItemAtPosition(position);
+    private void refreshActivity() {
+        displayOperandsListView();
+        displayDayStatsListView();
+        displayOperatorsListView();
+    }
 
-                // Get the id
-                String dbid =
-                        cursor.getString(cursor.getColumnIndexOrThrow("_id"));
-                Toast.makeText(getApplicationContext(),
-                        dbid, Toast.LENGTH_SHORT).show();
-            }
-        });
+    public void deleteClicked() {
+        new AlertDialog.Builder(this)
+                .setTitle("REALLY???")
+                .setMessage("Do you really want to delete whole database?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        uow.DropCreateDatabase();
+                        Toast.makeText(MainActivity.this, "Done", Toast.LENGTH_SHORT).show();
+                        refreshActivity();
+                    }})
+                .setNegativeButton(android.R.string.no, null).show();
     }
 
     @Override
@@ -66,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -74,10 +101,30 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_delete) {
+            deleteClicked();
+            uow.SeedData();
+        } else if (id == R.id.action_refresh) {
+            refreshClicked();
+        } else if (id == R.id.action_show_history) {
+            displayOperatorsListView();
+        } else if (id == R.id.action_show_daysstats) {
+            displayDayStatsListView();
+        } else if (id == R.id.action_show_operandstats) {
+            displayOperandsListView();
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshClicked();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+       refreshClicked();
     }
 }
