@@ -25,8 +25,9 @@ public class UOW {
         dbHelper = new MySQLiteHelper(context);
         database = dbHelper.getWritableDatabase();
 
-        dayStatisticRepo = new DayStatisticRepo(database, dbHelper.TABLE_DAYSTATISTIC, dbHelper.ALLCOLUMNS_DAYSTATISTIC, operandTypeRepo);
+
         operandTypeRepo = new OperandTypeRepo(database, dbHelper.TABLE_OPERANDTYPE, dbHelper.ALLCOLUMNS_OPERANDTYPE);
+        dayStatisticRepo = new DayStatisticRepo(database, dbHelper.TABLE_DAYSTATISTIC, dbHelper.ALLCOLUMNS_DAYSTATISTIC, operandTypeRepo);
         operationRepo = new OperationRepo(database, dbHelper.TABLE_OPERATION, dbHelper.ALLCOLUMNS_OPERATION, operandTypeRepo);
     }
 

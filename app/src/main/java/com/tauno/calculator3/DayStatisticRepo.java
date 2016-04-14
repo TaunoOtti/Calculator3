@@ -13,7 +13,7 @@ import java.util.Date;
  */
 public class DayStatisticRepo extends Repo<DayStatistic> {
 
-    OperandTypeRepo operandTypeRepo;
+    private OperandTypeRepo operandTypeRepo;
 
     public DayStatisticRepo(SQLiteDatabase database, String tableName, String[] allColumns, OperandTypeRepo operandTypeRepo){
         super(database, tableName, allColumns);
@@ -28,8 +28,7 @@ public class DayStatisticRepo extends Repo<DayStatistic> {
         stat.setDayStamp(cursor.getLong(1));
         stat.setDayCounter(cursor.getLong(2));
         stat.setOperandId(cursor.getLong(3));
-        //OperandId-st stringi tegemine annab vea...
-       // stat.setOperand(operandTypeRepo.getOperandforResult(stat.getOperandId));
+        stat.setOperand(operandTypeRepo.getOperandforResult(stat.getOperandId()));
         return stat;
     }
 

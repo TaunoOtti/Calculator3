@@ -67,7 +67,7 @@ public class DayStatistic implements IEntity {
 
     @Override
     public String toString() {
-        return "Date: \"" + dayStampToDate(getDayStamp()) + "\" \nOperand ID is: "+getOperandId()+" Count: "+getDayCounter();
+        return "Date: \"" + dayStampToDate(getDayStamp()) + "\" \nOperand is: "+getOperand()+" Count: "+getDayCounter();
     }
 
     private String dayStampToDate(long l) {
